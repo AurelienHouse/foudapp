@@ -1,12 +1,12 @@
 const dummyRestaurantsData = [
   {
     id: '0',
-    name: 'Bolt Food',
+    name: 'Foud Afalun',
     rating: 4.7,
     price: 3,
     distance: '0.85',
     delivery: '10-20',
-    profileImage: 'https://x7d4c5z5.stackpathcdn.com/wp-content/uploads/tc/2021/03/og-img.jpg',
+    profileImage: 'https://th.bing.com/th/id/OIG4.vG90WVmYpM78rQwyAHMC?pid=ImgGn',
     about: 'Your go-to place for quick and tasty meals delivered right to your doorstep.',
     food: [
       {
