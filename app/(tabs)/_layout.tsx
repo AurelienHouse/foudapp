@@ -1,7 +1,5 @@
-import { Link, Tabs } from 'expo-router';
-
-import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
+import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
@@ -10,22 +8,39 @@ export default function TabLayout() {
         tabBarActiveTintColor: 'black',
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
+          title: 'Home',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Entypo name="home" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="search"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Search',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Feather name="search" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: 'Orders',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Ionicons name="receipt-outline" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Feather name="user" size={24} color={color} />,
         }}
       />
     </Tabs>
