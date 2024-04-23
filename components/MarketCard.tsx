@@ -1,35 +1,36 @@
 /* eslint-disable prettier/prettier */
 import { FontAwesome } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 import React from 'react';
-
 import { View, Pressable, Image, Text } from 'react-native';
 
-import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
-
-const MarketCard = () => {
+const MarketCard = ({ restaurantData }) => {
+  const ratingStyle = {
+    color: restaurantData.rating < 4.5 ? 'black' : '#FF8C00',
+  };
   return (
-    <Pressable className={styles.cardContainer}>
-      <View>
-        <Image
-          source={{ uri: dummyRestaurantsData[0].profileImage }}
-          className={styles.cardImage}
-          resizeMode="cover"
-        />
-        <View className={styles.overlay}>
-          <Text className={styles.overlayText}>{dummyRestaurantsData[0].delivery} min</Text>
+    <Link href={{ pathname: `${restaurantData.id}`, params: { id: restaurantData.id } }} asChild>
+      <Pressable className={styles.cardContainer}>
+        <View>
+          <Image
+            source={{ uri: restaurantData.profileImage }}
+            className={styles.cardImage}
+            resizeMode="cover"
+          />
+          <View className={styles.overlay}>
+            <Text className={styles.overlayText}>{restaurantData.delivery} min</Text>
+          </View>
         </View>
-      </View>
-      <View className={styles.textsContainer}>
-        <Text className={styles.restaurantName}>{dummyRestaurantsData[0].name}</Text>
-        <View className={styles.ratingContainer}>
-          <FontAwesome name="star" size={17} color="black" />
-          <Text className={styles.rating}>{dummyRestaurantsData[0].rating}</Text>
+        <View className={styles.textsContainer}>
+          <Text className={styles.restaurantName}>{restaurantData.name}</Text>
+          <View className={styles.ratingContainer}>
+            <FontAwesome name="star" size={17} color={ratingStyle.color} />
+            <Text className={styles.rating}>{restaurantData.rating}</Text>
+          </View>
         </View>
-      </View>
-      <Text className={styles.price}>
-        {dummyRestaurantsData[0].price} $
-      </Text>
-    </Pressable>
+        <Text className={styles.price}>{restaurantData.price} $</Text>
+      </Pressable>
+    </Link>
   );
 };
 
@@ -43,7 +44,6 @@ const styles = {
   ratingContainer: 'flex flex-row items-center',
   rating: 'ml-1 font-bold text-base',
   price: 'text-sm font-[#6e6d72]',
-
 };
 
 export default MarketCard;

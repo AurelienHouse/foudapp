@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, FlatList, SafeAreaView } from 'react-native';
+
+import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
 import MarketCard from '~/components/MarketCard';
 
 const HomeScreen = () => {
@@ -14,8 +15,17 @@ const HomeScreen = () => {
           <Text className={styles.adressText}>Your Adress here</Text>
         </View>
       </View>
+      <FlatList
+        data={dummyRestaurantsData}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={() => (
+          <Text className={styles.cardTitle}>All Restaurants And Stores</Text>
+        )}
+        renderItem={({ item }) =><MarketCard restaurantData={item} />}
+      />
 
-      <MarketCard />
+      
     </SafeAreaView>
   );
 };
@@ -25,5 +35,6 @@ const styles = {
   header: 'flex-row justify-between',
   adressContainer: 'flex-row items-center',
   adressText: 'ml-2',
+  cardTitle: 'mt-4 mb-2 text-lg font-bold',
 };
 export default HomeScreen;
