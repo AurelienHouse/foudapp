@@ -2,7 +2,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import { Link, useGlobalSearchParams, useNavigation } from 'expo-router';
 import React, { useLayoutEffect, useState } from 'react';
 import {
   View,
@@ -19,6 +19,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import ParallaxScrollView from '../components/ParallaxScrollView.js';
 
 const RestaurantDetails = ({ post }) => {
+  const { id } = useGlobalSearchParams();
   const [headerIconColor, setHeaderIconColor] = useState('white');
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
@@ -81,20 +82,23 @@ const RestaurantDetails = ({ post }) => {
   }, [headerIconColor]);
 
   const renderItem: ListRenderItem<any> = ({ item, index }) => (
-    <TouchableOpacity className={styles.itemContainer}>
-      <View className="my-4 mr-8 flex flex-1">
-        <Text className="text-base ">{item.name}</Text>
-        <Text className="text-sm text-[#6e6d72]">{item.info}</Text>
-        <Text className="">{item.price} $</Text>
-      </View>
-      <Image
-        source={{ uri: item.img }}
-        width={100}
-        height={100}
-        className={styles.foodImage}
-        resizeMode="contain"
-      />
-    </TouchableOpacity>
+    // eslint-disable-next-line object-shorthand
+    <Link href={{ pathname: '/modalFood', params: { id: id, itemId: item.id } }} asChild>
+      <TouchableOpacity className={styles.itemContainer}>
+        <View className="my-4 mr-8 flex flex-1">
+          <Text className="text-base ">{item.name}</Text>
+          <Text className="text-sm text-[#6e6d72]">{item.info}</Text>
+          <Text className="">{item.price} $</Text>
+        </View>
+        <Image
+          source={{ uri: item.img }}
+          width={100}
+          height={100}
+          className={styles.foodImage}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    </Link>
   );
 
   const data = post.food.map((item, index) => ({
