@@ -1,31 +1,41 @@
 /* eslint-disable prettier/prettier */
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
+import { Link } from 'expo-router';
 import React from 'react';
-import { Text, View, FlatList, SafeAreaView } from 'react-native';
+import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
+import { dummyRestaurantsData } from '../../../assets/data/restaurantsData';
+
 import MarketCard from '~/components/MarketCard';
 
 const HomeScreen = () => {
+  const route = useRoute();
+  const address = route.params?.address || 'Your address here';
+  const streetName = address.split(',')[0].trim();
+  // console.log(streetName);
+
   return (
     <SafeAreaView className={styles.container}>
-      <View className={styles.header}>
-        <View className={styles.adressContainer}>
-          <MaterialCommunityIcons name="map-marker-outline" size={28} color="black" />
-          <Text className={styles.adressText}>Your Adress here</Text>
-        </View>
-      </View>
       <FlatList
         data={dummyRestaurantsData}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => (
-          <Text className={styles.cardTitle}>All Restaurants And Stores</Text>
+          <>
+            <Link href="/modalAddress" asChild>
+              <TouchableOpacity className={styles.header}>
+                <View className={styles.adressContainer}>
+                  <MaterialCommunityIcons name="map-marker-outline" size={28} color="black" />
+                  <Text className={styles.adressText}>{streetName}</Text>
+                </View>
+              </TouchableOpacity>
+            </Link>
+            <Text className={styles.cardTitle}>All Restaurants And Stores</Text>
+          </>
         )}
-        renderItem={({ item }) =><MarketCard restaurantData={item} />}
+        renderItem={({ item }) => <MarketCard restaurantData={item} />}
       />
-
-      
     </SafeAreaView>
   );
 };

@@ -6,6 +6,7 @@ import '../global.css';
 export default function RootLayout() {
   const navigation = useNavigation();
   return (
+    
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
@@ -25,6 +26,14 @@ export default function RootLayout() {
               <Ionicons name="close-outline" size={30} color="#5a5a5a" />
             </TouchableOpacity>
           ),
+        }}
+      />
+      <Stack.Screen
+        name="modalAddress"
+        options={{
+          presentation: 'modal',
+          title: 'Delivery address',
+          headerShown: false,
         }}
       />
     </Stack>
