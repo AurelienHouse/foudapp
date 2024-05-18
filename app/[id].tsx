@@ -3,7 +3,7 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
-import RestaurantDetails from '~/components/RestaurantDetails';
+import RestaurantDetails from '~/app/restaurantDetails';
 
 const RestaurantDetailsScreen = () => {
   const { id } = useLocalSearchParams();

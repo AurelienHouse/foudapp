@@ -2,8 +2,9 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { useAppContext } from 'context/appContext';
 import { Link, useGlobalSearchParams, useNavigation } from 'expo-router';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -20,11 +21,14 @@ import ParallaxScrollView from '../components/ParallaxScrollView.js';
 
 const RestaurantDetails = ({ post }) => {
   const { id } = useGlobalSearchParams();
+  const { foundMeals, count, totalPrice } = useAppContext;
+  const navigation = useNavigation();
+
   const [headerIconColor, setHeaderIconColor] = useState('white');
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [showButton, setShowButton] = useState(false);
 
-  const navigation = useNavigation();
   const opacity = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -64,16 +68,16 @@ const RestaurantDetails = ({ post }) => {
       headerTitle: '',
       headerTintColor: 'white',
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()} className={styles.roudButton}>
+        <TouchableOpacity onPress={() => navigation.goBack()} className={styles.roundButton}>
           <Ionicons name="arrow-back" size={24} color={headerIconColor} />
         </TouchableOpacity>
       ),
       headerRight: () => (
         <View className={styles.rightContainer}>
-          <TouchableOpacity className={styles.roudButton}>
+          <TouchableOpacity className={styles.roundButton}>
             <Ionicons name="share-outline" size={24} color={headerIconColor} />
           </TouchableOpacity>
-          <TouchableOpacity className={styles.roudButton}>
+          <TouchableOpacity className={styles.roundButton}>
             <Ionicons name="search-outline" size={24} color={headerIconColor} />
           </TouchableOpacity>
         </View>
@@ -81,12 +85,24 @@ const RestaurantDetails = ({ post }) => {
     });
   }, [headerIconColor]);
 
+  useEffect(() => {
+    setShowButton(totalPrice > 0);
+  }, [totalPrice]);
+
   const renderItem: ListRenderItem<any> = ({ item, index }) => (
     // eslint-disable-next-line object-shorthand
     <Link href={{ pathname: '/modalFood', params: { id: id, itemId: item.id } }} asChild>
-      <TouchableOpacity className={styles.itemContainer}>
-        <View className="my-4 mr-8 flex flex-1">
-          <Text className="text-base ">{item.name}</Text>
+      <TouchableOpacity
+        className={`${styles.itemContainer} ${count >= 1 && foundMeals?.id === item.id ? styles.greenBorder : ''} `}>
+        <View className=" my-6 ml-6 mr-8 flex flex-1 justify-center">
+          <View className=" flex flex-row items-center">
+            {count >= 1 && foundMeals?.id === item.id && (
+              <View className=" mr-2 h-7 w-6 items-center rounded-md bg-[#34BB78]">
+                <Text className=" text-lg font-semibold text-white">{count}</Text>
+              </View>
+            )}
+            <Text className="text-base ">{item.name}</Text>
+          </View>
           <Text className="text-sm text-[#6e6d72]">{item.info}</Text>
           <Text className="">{item.price} $</Text>
         </View>
@@ -158,7 +174,7 @@ const RestaurantDetails = ({ post }) => {
           </View>
         </View>
         <View className={styles.itemsContainer}>
-          <View className="m-6">
+          <View>
             <SectionList
               sections={data}
               scrollEnabled={false}
@@ -167,7 +183,7 @@ const RestaurantDetails = ({ post }) => {
               ItemSeparatorComponent={() => <View className="border-[0.5px] border-slate-300" />}
               SectionSeparatorComponent={() => <View className="border-[0.5px] border-slate-300" />}
               renderSectionHeader={({ section: { title, index } }) => (
-                <Text className="my-4 text-2xl font-bold text-[#2e303d]">{title}</Text>
+                <Text className="my-2 ml-6 text-2xl font-bold text-[#2e303d]">{title}</Text>
               )}
             />
           </View>
@@ -200,6 +216,17 @@ const RestaurantDetails = ({ post }) => {
           </ScrollView>
         </View>
       </Animated.View>
+
+      {showButton && (
+        <TouchableOpacity className=" border-t border-gray-200 bg-white pb-8 pt-4">
+          <View className="mx-7 items-center rounded-full bg-[#34BB78] py-3 font-bold">
+            <Text className=' text-white font-bold text-lg'>
+              View Basket
+              {totalPrice} $
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </>
   );
 };
@@ -212,7 +239,7 @@ const styles = {
   restaurantName: 'text-2xl font-bold text-[#2e303d]',
   ratingContainerRow: 'flex flex-row items-center',
   rating: 'ml-1 font-bold text-base',
-  roudButton: 'w-10 h-10 bg-tranparent rounded-full justify-center items-center',
+  roundButton: 'w-10 h-10 bg-tranparent rounded-full justify-center items-center',
   rightContainer: 'flex flex-row justify-center items-center gap-2',
   deliveryTextsContainer: 'flex flex-row items-center',
   deliveryTexts: 'text-sm ml-1 text-[#2e303d]',
@@ -220,7 +247,8 @@ const styles = {
   separator: 'h-[0.5px] bg-slate-300 my-4',
   deliveryAbout: 'text-sm ml-1 text-[#2e303d] ',
   itemsContainer: 'flex bg-white mt-2 rounded-t-2xl',
-  itemContainer: 'flex flex-row justify-between my-2 items-center',
+  itemContainer: 'flex flex-row justify-between items-center',
+  greenBorder: ' border-l-8 border-[#34BB78]',
   foodImage: 'w-28 h-27 rounded-sm',
   stickyButtonActive: 'px-2 py-1',
   stickyButton: 'px-2 py-1',

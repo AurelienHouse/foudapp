@@ -1,17 +1,63 @@
 /* eslint-disable prettier/prettier */
-import { useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
+import { useAppContext } from '~/context/appContext';
 
 const ModalFood = () => {
   const { id, itemId } = useLocalSearchParams();
-  const restaurantById = dummyRestaurantsData?.find((r) => r?.id === id);
-  const meals = restaurantById?.food.flatMap((c) => c.meals);
-  const foundMeals = meals?.find((m) => m.id === +itemId);
+  const navigation = useNavigation();
+  const { setFoodData, count, setCount } = useAppContext();
   const [note, setNote] = useState('');
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [restaurantById, setRestaurantById] = useState(null);
+  const [meals, setMeals] = useState([]);
+  const [foundMeals, setfoundMeals] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const restaurantData = dummyRestaurantsData?.find((r) => r?.id === id);
+      setRestaurantById(restaurantData);
+
+      if (restaurantData) {
+        const allMeals = restaurantData?.food.flatMap((c) => c.meals);
+        setMeals(allMeals);
+        const foundMeal = allMeals?.find((m) => m.id === +itemId);
+        setfoundMeals(foundMeal);
+
+        if (foundMeal) {
+          setTotalPrice(foundMeal.price);
+        }
+      }
+    };
+    fetchData();
+  }, [id, itemId]);
+
+  useEffect(() => {
+    if (foundMeals) {
+      setTotalPrice(foundMeals.price * count);
+    }
+  }, [foundMeals, count]);
+
+  // Items count
+  const decrementCount = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
+  const goBackAndSetFoodData = () => {
+    setFoodData({
+      totalPrice, restaurantById, meals, foundMeals, count
+    })
+    navigation.goBack();
+  };
+
   // console.log(foundMeals)
   return (
     <View className={styles.container}>
@@ -28,12 +74,24 @@ const ModalFood = () => {
       </View>
       <View className=" mb-auto mt-1 flex flex-row justify-between bg-white p-4">
         <View className="flex h-12 w-28 flex-row items-center justify-evenly rounded-full border">
-          <Text>-</Text>
-          <Text>1</Text>
-          <Text>+</Text>
+          {count > 1 ? (
+            <TouchableOpacity onPress={decrementCount}>
+              <Text className="text-2xl text-black">-</Text>
+            </TouchableOpacity>
+          ) : (
+            <View>
+              <Text className="text-2xl text-gray-500">-</Text>
+            </View>
+          )}
+          <Text className="text-lg">{count}</Text>
+          <TouchableOpacity onPress={incrementCount}>
+            <Text className=" text-2xl">+</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity className="w-56 items-center justify-center rounded-full bg-[#34bb78]">
-          <Text className=" text-white">add $3.00</Text>
+        <TouchableOpacity
+          className="w-56 items-center justify-center rounded-full bg-[#34bb78]"
+          onPress={goBackAndSetFoodData}>
+          <Text className=" text-white">add ${totalPrice?.toFixed(2)}</Text>
         </TouchableOpacity>
       </View>
     </View>

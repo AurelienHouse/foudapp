@@ -2,18 +2,23 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 
 import { dummyRestaurantsData } from '../../../assets/data/restaurantsData';
 
 import MarketCard from '~/components/MarketCard';
+import { useAppContext } from '~/context/appContext';
 
 const HomeScreen = () => {
   const route = useRoute();
-  const address = route.params?.address || 'Your address here';
-  const streetName = address.split(',')[0].trim();
-  // console.log(streetName);
+  const { streetName, setStreet } = useAppContext();
+
+  useEffect(() => {
+    const address = route.params?.address || 'Your address here';
+    const streetName = address.split(',')[0].trim();
+    setStreet(streetName);
+  }, [route.params?.address, setStreet]);
 
   return (
     <SafeAreaView className={styles.container}>
