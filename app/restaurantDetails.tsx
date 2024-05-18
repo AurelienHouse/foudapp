@@ -218,14 +218,16 @@ const RestaurantDetails = ({ post }) => {
       </Animated.View>
 
       {showButton && (
-        <TouchableOpacity className=" border-t border-gray-200 bg-white pb-8 pt-4">
-          <View className="mx-7 items-center rounded-full bg-[#34BB78] py-3 font-bold">
-            <Text className=' text-white font-bold text-lg'>
-              View Basket
-              {totalPrice} $
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <Link href="/basketScreen" asChild>
+          <TouchableOpacity className=" border-t border-gray-200 bg-white pb-8 pt-4">
+            <View className="mx-7 items-center rounded-full bg-[#34BB78] py-3 font-bold">
+              <Text className=" text-lg font-bold text-white">
+                View Basket
+                {totalPrice} $
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
       )}
     </>
   );

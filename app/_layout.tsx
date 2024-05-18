@@ -46,6 +46,13 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="basketScreen"
+          options={{
+            title: '',
+            headerShown: true,
+          }}
+        />
       </Stack>
     </AppProvider>
   );
