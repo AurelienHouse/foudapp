@@ -7,7 +7,7 @@ import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from 'react-nati
 
 import { dummyRestaurantsData } from '../../../assets/data/restaurantsData';
 
-import MarketCard from '~/components/MarketCard';
+import MarketCard from '~/components/marketCard';
 import { useAppContext } from '~/context/appContext';
 
 const HomeScreen = () => {
@@ -30,9 +30,9 @@ const HomeScreen = () => {
           <>
             <Link href="/modalAddress" asChild>
               <TouchableOpacity className={styles.header}>
-                <View className={styles.adressContainer}>
+                <View className={styles.addressContainer}>
                   <MaterialCommunityIcons name="map-marker-outline" size={28} color="black" />
-                  <Text className={styles.adressText}>{streetName}</Text>
+                  <Text className={styles.addressText}>{streetName}</Text>
                 </View>
               </TouchableOpacity>
             </Link>
@@ -48,8 +48,11 @@ const HomeScreen = () => {
 const styles = {
   container: 'flex-1 p-4 mt-6 bg-white',
   header: 'flex-row justify-between',
-  adressContainer: 'flex-row items-center',
-  adressText: 'ml-2',
+  title: 'text-xl font-bold',
+  addressContainer: 'flex-row items-center',
+  addressText: 'ml-2',
+  cardContainer: 'mt-4',
+  cardImage: 'w-full h-200 rounded-lg',
   cardTitle: 'mt-4 mb-2 text-lg font-bold',
 };
 export default HomeScreen;

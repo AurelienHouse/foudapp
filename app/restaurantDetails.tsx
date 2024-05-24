@@ -21,7 +21,7 @@ import ParallaxScrollView from '../components/ParallaxScrollView.js';
 
 const RestaurantDetails = ({ post }) => {
   const { id } = useGlobalSearchParams();
-  const { foundMeals, count, totalPrice } = useAppContext;
+  const { foundMeals, count, totalPrice } = useAppContext();
   const navigation = useNavigation();
 
   const [headerIconColor, setHeaderIconColor] = useState('white');
