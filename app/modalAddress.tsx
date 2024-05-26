@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
-import { Link, useNavigation } from 'expo-router';
+import { Link, router, useNavigation } from 'expo-router';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, Animated, TouchableOpacity, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { useAppContext } from '~/context/appContext';
 
 const ModalAddress = () => {
+  const { setCoordinates } = useAppContext();
   const navigation = useNavigation();
   const [headerVisible, setHeaderVisible] = useState(false);
   const [containerMargin] = useState(new Animated.Value(40));
@@ -20,11 +22,11 @@ const ModalAddress = () => {
         useNativeDriver: false,
       }).start();
     } else {
-        Animated.timing(containerMargin, {
-            toValue: 40,
-            duration: 500,
-            useNativeDriver: false,
-          }).start();
+      Animated.timing(containerMargin, {
+        toValue: 40,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
     }
   };
 
@@ -41,6 +43,15 @@ const ModalAddress = () => {
   useLayoutEffect(() => {
     handleAddressPress();
   }, [headerVisible]);
+  const handleSelectPlace = (place) => {
+    // console.log('selected place: ', place.formatted_address);
+    const { lat, lng } = place.geometry.location;
+    setCoordinates({ latitude: lat, longitude: lng });
+    router.replace({
+      pathname: '/(tabs)/home',
+      params: { address: place.formatted_address },
+    });
+  };
 
   const handleAddressPress = () => {
     navigation.setOptions({
@@ -49,6 +60,9 @@ const ModalAddress = () => {
         <GooglePlacesAutocomplete
           placeholder="Enter a new address"
           fetchDetails
+          onPress={(data, details = null) => {
+            handleSelectPlace(details);
+          }}
           query={{
             key: googleAPI,
             language: 'en',
@@ -88,18 +102,15 @@ const ModalAddress = () => {
           )}
           enablePoweredByContainer={false}
           renderRow={(item) => (
-            <Link href={{ pathname: '/(tabs)/home', params: { adress: item.description } }} asChild>
-              <TouchableOpacity className="flex flex-row items-center">
-                <Feather name="map-pin" size={18} color="black" />
-                <Text>{item.description}</Text>
-              </TouchableOpacity>
-            </Link>
+            <View className="flex flex-row items-center">
+              <Feather name="map-pin" size={18} color="black" />
+              <Text>{item.description}</Text>
+            </View>
           )}
         />
       ),
-      headerLeft:()=> null,
+      headerLeft: () => null,
       headerBackVisible: false,
-      
     });
   };
 

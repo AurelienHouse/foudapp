@@ -1,17 +1,14 @@
 /* eslint-disable prettier/prettier */
-import {
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
+import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
 import { useNavigation } from 'expo-router';
 import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, FlatList, ScrollView } from 'react-native';
-import DeliveryOptions from '~/components/deliveryOptions';
-import PricingComponent from '~/components/pricingComponent';
 
+import DeliveryOptions from '~/components/deliveryOptions';
+import MapViewComponent from '~/components/mapViewComponent';
+import PricingComponent from '~/components/pricingComponent';
+import SwipeButtonComponent from '~/components/swipeButtonComponent';
 import { useAppContext } from '~/context/appContext';
 
 const sauceData = [
@@ -61,9 +58,19 @@ const renderItem = ({ item }) => (
 );
 
 const BasketScreen = () => {
-  const { restaurantById, count, setCount, totalPrice, setTotalPrice, foundMeals, streetName } =
-    useAppContext();
+  const {
+    restaurantById,
+    count,
+    setCount,
+    totalPrice,
+    setTotalPrice,
+    foundMeals,
+    streetName,
+    coordinates,
+  } = useAppContext();
+  const [isChecked, setChecked] = useState(false);
   const navigation = useNavigation();
+  const { latitude, longitude } = coordinates || {};
 
   useLayoutEffect(() => {
     if (restaurantById && restaurantById.name) {
@@ -112,7 +119,7 @@ const BasketScreen = () => {
             />
             <View>
               <Text className=" text-lg text-gray-800">{foundMeals.name}</Text>
-              <Text className=" text-base font-bold">{foundMeals.price} $</Text>
+              <Text className=" text-base font-bold">{totalPrice} $</Text>
             </View>
           </View>
 
@@ -173,23 +180,49 @@ const BasketScreen = () => {
       </View>
       {/* map view */}
       <View className="mt-2 flex flex-1 rounded-2xl bg-white px-4 py-6">
-        {/* Google places autocomplet */}
-        <TouchableOpacity className={styles.header}>
-          <View className={styles.adressContainer}>
-            <MaterialCommunityIcons name="map-marker-outline" size={28} color="black" />
-            <Text className={styles.adressText}>{streetName}</Text>
+        <MapViewComponent streetName={streetName} latitude={latitude} longitude={longitude} />
+      </View>
+
+      {/* place order */}
+      <View className="mt-2 flex flex-1 rounded-2xl bg-white py-6">
+        {/* Total */}
+        <View className=" mb-4 flex flex-row items-center justify-between px-4">
+          <View className=" flex flex-row items-center">
+            <Text className=" mr-1 text-lg font-bold">Total</Text>
           </View>
-          <Entypo name="chevron-thin-right" size={22} color="gray" />
-        </TouchableOpacity>
-        {/* MapView */}
-        
+          <Text className=" text-lg font-bold">{totalPrice} $</Text>
+        </View>
+        {/* Cash Row */}
+        <View className=" mb-2 mt-2 flex flex-row items-center justify-between px-4">
+          <View className=" flex flex-row items-center">
+            <FontAwesome5 name="money-bill-wave-alt" size={24} color="#34BB78" />
+            <View className=" ml-2 flex flex-col">
+              <Text className=" text-base ">Cash</Text>
+              <Text className=" text-base text-[#34BB78]">Change</Text>
+            </View>
+          </View>
+          <Text className=" text-base">{totalPrice} $</Text>
+        </View>
+        {/* Cash Warning */}
+        <View className=" mb-2 mt-2 flex flex-row items-center px-4">
+          <Checkbox
+            value={isChecked}
+            onValueChange={setChecked}
+            color={isChecked ? '#34BB78' : undefined}
+          />
+          <Text className=" ml-2 text-base">
+            <Text>Cash order</Text>
+            <FontAwesome5 name="exclamation-triangle" size={18} color="#fcb001" />
+            <Text>I accept that courier may not have change</Text>
+            <FontAwesome5 name="exclamation-triangle" size={18} color="#fcb001" />
+          </Text>
+        </View>
+        {/* {separator} */}
+        <View className=" my-4 border-[0.5px] border-slate-200" />
+        <SwipeButtonComponent />
       </View>
     </ScrollView>
   );
 };
-const styles = {
-  header: 'flex-row justify-between',
-  adressContainer: 'flex-row items-center',
-  adressText: 'ml-2',
-};
+
 export default BasketScreen;

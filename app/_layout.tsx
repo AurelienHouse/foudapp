@@ -53,6 +53,14 @@ export default function RootLayout() {
             headerShown: true,
           }}
         />
+        <Stack.Screen
+          name="orderTracking"
+          options={{
+            title: 'Order Tracking',
+            headerShown: true,
+            headerTitleAlign: 'center',
+          }}
+        />
       </Stack>
     </AppProvider>
   );
