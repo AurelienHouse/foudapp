@@ -3,7 +3,7 @@ import { SwipeButton } from '@arelstone/react-native-swipe-button';
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 
 const SwipeButtonComponent = () => {
   const [swiping, setswiping] = useState(false);
@@ -29,7 +29,7 @@ const SwipeButtonComponent = () => {
         onSwipeStart={() => setswiping(true)}
         onSwipeEnd={() => setswiping(false)}
         completeThresholdPercentage={70}
-        goBackToStart={true}
+        goBackToStart
       />
     </View>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, } from 'react-native';
+import { View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import BottomSheetComponent from '~/components/bottomSheetComponent';
@@ -18,16 +18,16 @@ const OrderTracking = () => {
       <MapView
         className="h-full w-full rounded-lg"
         initialRegion={{
-          latitude: latitude,
-          longitude: longitude,
+          latitude,
+          longitude,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}>
         {/* Person */}
         <Marker
           coordinate={{
-            latitude: latitude,
-            longitude: longitude,
+            latitude,
+            longitude,
           }}>
           <View className="flex h-8 w-8 items-center justify-center rounded-full bg-black">
             <Ionicons name="person" size={18} color="white" />

@@ -42,7 +42,7 @@ const BottomSheetComponent = () => {
 
   const stepTimes = useMemo(() => {
     const times = [];
-    let time = new Date(fixedDeliveryTime);
+    const time = new Date(fixedDeliveryTime);
     for (let i = 0; i < trackData.length; i++) {
       times.push(new Date(time));
       time.setMilliseconds(time.getMilliseconds() + stepInterval);
