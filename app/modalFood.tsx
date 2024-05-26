@@ -2,7 +2,7 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 
 import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
 import { useAppContext } from '~/context/appContext';
@@ -53,48 +53,54 @@ const ModalFood = () => {
   };
   const goBackAndSetFoodData = () => {
     setFoodData({
-      totalPrice, restaurantById, meals, foundMeals, count
-    })
+      totalPrice,
+      restaurantById,
+      meals,
+      foundMeals,
+      count,
+    });
     navigation.goBack();
   };
 
   // console.log(foundMeals)
   return (
-    <View className={styles.container}>
-      <View className="rounded-b-2xl bg-white">
-        <Image source={{ uri: foundMeals?.img }} resizeMode="contain" className="h-72 w-full" />
-        <View className=" p-5">
-          <Text className=" text-2xl font-bold">{foundMeals?.name}</Text>
-          <Text className=" my-2 font-[#6e6d72] text-base">{foundMeals?.price} $</Text>
-          <Text className=" font-[#6f707c] text-base ">{foundMeals?.info}</Text>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View className={styles.container}>
+        <View className="rounded-b-2xl bg-white">
+          <Image source={{ uri: foundMeals?.img }} resizeMode="contain" className="h-72 w-full" />
+          <View className=" p-5">
+            <Text className=" text-2xl font-bold">{foundMeals?.name}</Text>
+            <Text className=" my-2 font-[#6e6d72] text-base">{foundMeals?.price} $</Text>
+            <Text className=" font-[#6f707c] text-base ">{foundMeals?.info}</Text>
+          </View>
         </View>
-      </View>
-      <View className=" mt-2 rounded-t-2xl bg-white p-4">
-        <TextInput placeholder="Add a note" value={note} onChangeText={setNote} />
-      </View>
-      <View className=" mb-auto mt-1 flex flex-row justify-between bg-white p-4">
-        <View className="flex h-12 w-28 flex-row items-center justify-evenly rounded-full border">
-          {count > 1 ? (
-            <TouchableOpacity onPress={decrementCount}>
-              <Text className="text-2xl text-black">-</Text>
+        <View className=" mt-2 rounded-t-2xl bg-white p-4">
+          <TextInput placeholder="Add a note" value={note} onChangeText={setNote} />
+        </View>
+        <View className=" mb-auto mt-1 flex flex-row justify-between bg-white p-4">
+          <View className="flex h-12 w-28 flex-row items-center justify-evenly rounded-full border">
+            {count > 1 ? (
+              <TouchableOpacity onPress={decrementCount}>
+                <Text className="text-2xl text-black">-</Text>
+              </TouchableOpacity>
+            ) : (
+              <View>
+                <Text className="text-2xl text-gray-500">-</Text>
+              </View>
+            )}
+            <Text className="text-lg">{count}</Text>
+            <TouchableOpacity onPress={incrementCount}>
+              <Text className=" text-2xl">+</Text>
             </TouchableOpacity>
-          ) : (
-            <View>
-              <Text className="text-2xl text-gray-500">-</Text>
-            </View>
-          )}
-          <Text className="text-lg">{count}</Text>
-          <TouchableOpacity onPress={incrementCount}>
-            <Text className=" text-2xl">+</Text>
+          </View>
+          <TouchableOpacity
+            className="w-56 items-center justify-center rounded-full bg-[#34bb78]"
+            onPress={goBackAndSetFoodData}>
+            <Text className=" text-white">add ${totalPrice?.toFixed(2)}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          className="w-56 items-center justify-center rounded-full bg-[#34bb78]"
-          onPress={goBackAndSetFoodData}>
-          <Text className=" text-white">add ${totalPrice?.toFixed(2)}</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </GestureHandlerRootView>
   );
 };
 

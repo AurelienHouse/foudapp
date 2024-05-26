@@ -24,7 +24,6 @@ const DeliveryOptions = ({ restaurantById }) => {
 
         <View className="flex flex-row items-center">
           <Text className=" mr-2 text-base">0.00 $</Text>
-          // eslint-disable-next-line react/self-closing-comp
           <TouchableOpacity
             style={{
               width: selectedOption === 'delivery' ? 20 : 20,

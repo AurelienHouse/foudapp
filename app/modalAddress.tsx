@@ -4,6 +4,7 @@ import { Link, router, useNavigation } from 'expo-router';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, Animated, TouchableOpacity, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
 import { useAppContext } from '~/context/appContext';
 
 const ModalAddress = () => {

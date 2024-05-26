@@ -4,6 +4,7 @@ import Checkbox from 'expo-checkbox';
 import { useNavigation } from 'expo-router';
 import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, FlatList, ScrollView } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import DeliveryOptions from '~/components/deliveryOptions';
 import MapViewComponent from '~/components/mapViewComponent';
@@ -219,7 +220,9 @@ const BasketScreen = () => {
         </View>
         {/* {separator} */}
         <View className=" my-4 border-[0.5px] border-slate-200" />
-        <SwipeButtonComponent />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SwipeButtonComponent />
+        </GestureHandlerRootView>
       </View>
     </ScrollView>
   );
