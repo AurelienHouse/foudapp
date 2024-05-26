@@ -2,6 +2,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import React from 'react';
+import { dummyRestaurantsData } from '~/assets/data/restaurantsData';
 import { View, Pressable, Image, Text } from 'react-native';
 
 const MarketCard = ({ restaurantData }) => {
